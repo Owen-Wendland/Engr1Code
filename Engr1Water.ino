@@ -11,12 +11,16 @@ LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
 const int buzzer = 8; //buzzer to arduino pin 8
 const String notes[] = {"c", "c#", "d", "d#", "e", "f", "f#", "g","g#", "a", "a#", "b"};
 
+//lcd contrast pin
+const int contrast = 13; 
+
 // Value for storing water level
 int waterLevel = 0;
 
 int timer = 0;
 
 void setup() {
+  analogWrite(contrast, 130); 
   //setup size of lcd
   lcd.begin(16, 2);
 
@@ -39,8 +43,10 @@ void loop() {
   //Serial.print("Water level: ");
   //Serial.println((String)waterLevel + "%");
   lcd.clear();
-  lcd.print(waterLevel);
+  lcd.setCursor(0, 0);
+  lcd.print((waterLevel));
   lcd.setCursor(0, 1);
+  Serial.println(timer);
   if(waterLevel >= 70){
     lcd.print("Watered");
   }
@@ -56,16 +62,17 @@ void loop() {
     if(timer<60){
       timer++;
     }
-    else if(timer>60){
+    else if(timer>=60){
       timer = 0;
       littleLamb();
     }
+    lcd.setCursor(14, 1);
+    lcd.print((timer));
   }
   //lcd.setCursor(2, 0);
   //lcd.print(noteToHz("C", 4));
   //-----------------------DELAY IS HERE------------
   delay(1000);
-
   //reset lcd
   lcd.setCursor(0, 0);
 }
